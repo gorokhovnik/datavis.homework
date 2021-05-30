@@ -1,82 +1,101 @@
 @font-face {
     font-family: "Inter";
     src: url("/fonts/Inter-VariableFont_slnt,wght.ttf") format("ttf");
-   }
+}
 
-body{
+body {
     font-family: 'Inter';
     background-color: #fafbff;
+    width: 100%;
 
     -moz-user-select: none;
     -webkit-user-select: none;
-    -ms-user-select:none;
-    user-select:none;
-    -o-user-select:none;
+    -ms-user-select: none;
+    user-select: none;
+    -o-user-select: none;
 }
-.body{
-    margin: 0 40px;
+
+.body {
+    margin: 1%;
 }
-.legend{
+
+.legend {
     margin: 30px 0 27px 0;
 }
-.legend-item{
+
+.legend-item {
     margin-right: 35px;
 }
-.legend-circle{
+
+.legend-circle {
     margin-right: 10px;
     width: 15px;
     height: 15px;
     border-radius: 50%;
 }
-.first-child{
+
+.first-child {
     flex-grow: 1;
-    margin-right: 20px;
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 60%;
 }
-.block{
+
+.block {
     background-color: #FFFFFF;
     box-shadow: 0px 4px 25px -7px rgba(159, 191, 209, 0.55);
-    border-radius: 12px;
     position: relative;
+    width: 30%;
 }
+
 .row {
     display: flex;
 }
-.space-between{
+
+.space-between {
     justify-content: space-between;
 }
+
 circle {
     stroke: black;
     opacity: .7;
 }
-.select{
+
+.select {
     margin-left: 33px;
 }
-.lable{
+
+.label {
     color: #8790A6;
     margin: 5px 0 10px 0;
 }
-select{
+
+select {
     background-color: #EEF3FE;
     border-radius: 6px;
     padding: 10px 20px;
     font-size: 14px;
 }
-h1{
+
+h1 {
     color: #423A3A;
     font-weight: bold;
     font-size: 48px;
     line-height: 58px;
 }
-.year{
+
+.year {
     font-size: 100px;
     color: #815f5f52;
     position: absolute;
     top: 20px;
     left: 120px;
 }
-.line-chart-container{
+
+.line-chart-container {
     position: relative;
 }
+
 .country-name {
     font-size: 100px;
     color: #815f5f52;
@@ -84,17 +103,21 @@ h1{
     top: 70px;
     left: 120px;
 }
+
 .country {
     font-size: 25px;
     font-weight: bold;
 }
+
 .side-pan {
     margin: 20px;
 }
 
-.range-control{
+.range-control {
     padding: 20px 40px;
+    width: 100%;
 }
+
 .slider {
     -webkit-appearance: none;
     width: 100%;
