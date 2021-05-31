@@ -24,8 +24,9 @@ let rParam = 'gdp';
 let year = '2000';
 let param = 'child-mortality';
 let lineParam = 'gdp';
-let highlighted = '';
+let chosen = null;
 let selected;
+let selectedRegion;
 
 const x = d3.scaleLinear().range([margin * 2, width - margin]);
 const y = d3.scaleLinear().range([height - margin, margin]);
@@ -75,6 +76,34 @@ loadData().then(data => {
         param = d3.select(this).property('value');
         updateBar();
     });
+
+    function updateSelected() {
+        d3.selectAll('rect').on('click', function (selected) {
+            if (chosen != this) {
+                d3.selectAll('rect').style('opacity', 0.3);
+                d3.select(this).style('opacity', 1);
+
+                selectedRegion = selected.region
+
+                d3.selectAll('circle').style('opacity', 0);
+                d3.selectAll('circle').filter(function (d) {
+                    return d['region'] == selectedRegion;
+                }).style('opacity', 1);
+                chosen = this;
+            } else {
+                d3.selectAll('rect').style('opacity', 1);
+                d3.selectAll('circle').style('opacity', 0.9);
+                chosen = null;
+            }
+        });
+        if (chosen != null) {
+            d3.selectAll('circle').style('opacity', 0);
+            d3.selectAll('circle').filter(function (d) {
+                return d['region'] == selectedRegion;
+            }).style('opacity', 1);
+        }
+
+    }
 
     function updateBar() {
         uniqueRegions = d3.map(data, function (d) {
@@ -133,6 +162,16 @@ loadData().then(data => {
             .style("fill", function (d) {
                 return colorScale(d['region']);
             });
+
+        // d3.selectAll('rect').on('click', function (selected) {
+        //     d3.selectAll('rect').style('opacity', 0.3);
+        //     d3.select(this).style('opacity', 1);
+        //
+        //     d3.selectAll('circle').style('opacity', 0);
+        //     d3.selectAll('circle').filter(d => d['region'] == selected.region).style('opacity', 1);
+        // });
+
+        updateSelected();
 
         return;
     }
