@@ -6,7 +6,6 @@
 body {
     font-family: 'Inter';
     background-color: #fafbff;
-    width: 100%;
 
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -16,7 +15,7 @@ body {
 }
 
 .body {
-    margin: 1%;
+    margin: 0 40px;
 }
 
 .legend {
@@ -36,16 +35,14 @@ body {
 
 .first-child {
     flex-grow: 1;
-    margin-left: 1%;
-    margin-right: 1%;
-    width: 60%;
+    margin-right: 20px;
 }
 
 .block {
     background-color: #FFFFFF;
     box-shadow: 0px 4px 25px -7px rgba(159, 191, 209, 0.55);
+    border-radius: 12px;
     position: relative;
-    width: 30%;
 }
 
 .row {
@@ -65,7 +62,7 @@ circle {
     margin-left: 33px;
 }
 
-.label {
+.lable {
     color: #8790A6;
     margin: 5px 0 10px 0;
 }
@@ -115,7 +112,6 @@ h1 {
 
 .range-control {
     padding: 20px 40px;
-    width: 100%;
 }
 
 .slider {
