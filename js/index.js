@@ -3,7 +3,7 @@ const barWidth = 500;
 const height = 500;
 const margin = 30;
 
-const yearLable = d3.select('#year');
+const yearLabel = d3.select('#year');
 const countryName = d3.select('#country-name');
 
 const barChart = d3.select('#bar-chart')
@@ -44,7 +44,7 @@ const xBarAxis = barChart.append('g').attr('transform', `translate(0, ${height -
 const yBarAxis = barChart.append('g').attr('transform', `translate(${margin * 2}, 0)`);
 
 const colorScale = d3.scaleOrdinal().range(['#DD4949', '#39CDA1', '#FD710C', '#A14BE5']);
-const radiusScale = d3.scaleSqrt().range([10, 30]);
+const radiusScale = d3.scaleSqrt().range([5, 40]);
 
 loadData().then(data => {
 
@@ -52,7 +52,7 @@ loadData().then(data => {
 
     d3.select('#range').on('input', function () {
         year = d3.select(this).property('value');
-        yearLable.html(year);
+        yearLabel.html(year);
         updateScatterPlot();
         updateBar();
     });
@@ -174,6 +174,66 @@ loadData().then(data => {
     }
 
     function updateScatterPlot() {
+        let xRange = data.map(function (d) {
+            return +d[xParam][year];
+        });
+        x.domain([0, d3.max(xRange) * 1.1]);
+        xAxis.call(d3.axisBottom(x));
+
+        let yRange = data.map(function (d) {
+            return +d[yParam][year];
+        });
+        y.domain([0, d3.max(yRange) * 1.1]);
+        yAxis.call(d3.axisLeft(y));
+
+        let rRange = data.map(function (d) {
+            return +d[rParam][year];
+        });
+        radiusScale.domain([d3.min(rRange), d3.max(rRange)]);
+
+        scatterPlot.selectAll('circle').data(data)
+            .enter()
+            .append('circle')
+            .attr("cx", function (d) {
+                return x(d[xParam][year]);
+            })
+            .attr("cy", function (d) {
+                return y(d[yParam][year]);
+            })
+            .attr("r", function (d) {
+                return radiusScale(d[rParam][year]);
+            })
+            .style("fill", function (d) {
+                return colorScale(d['region']);
+            })
+            .style("opacity", 0.9);
+
+        scatterPlot.selectAll('circle').data(data)
+            .attr("cx", function (d) {
+                return x(d[xParam][year]);
+            })
+            .attr("cy", function (d) {
+                return y(d[yParam][year]);
+            })
+            .attr("r", function (d) {
+                return radiusScale(d[rParam][year]);
+            })
+            .style("fill", function (d) {
+                return colorScale(d['region']);
+            })
+            .style("opacity", 0.9);
+
+        scatterPlot.selectAll('circle').on('click', function (selected) {
+            selectedCountry = selected['country'];
+            selectedCountryRegion = selected['region'];
+            d3.selectAll('circle').style('stroke-width', 1);
+            this.parentNode.appendChild(this);
+            d3.select(this).style('stroke-width', 5);
+            updateLinear();
+        });
+
+        updateSelected()
+
         return;
     }
 
