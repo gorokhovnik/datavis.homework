@@ -25,7 +25,7 @@ let year = '2000';
 let param = 'child-mortality';
 let lineParam = 'gdp';
 let chosen = null;
-let selected;
+let selectedCountry;
 let selectedRegion;
 
 const x = d3.scaleLinear().range([margin * 2, width - margin]);
@@ -75,6 +75,11 @@ loadData().then(data => {
     d3.select('#param').on('change', function () {
         param = d3.select(this).property('value');
         updateBar();
+    });
+
+    d3.select('#p').on('change', function () {
+        lineParam = d3.select(this).property('value');
+        updateLinear();
     });
 
     function updateSelected() {
@@ -163,14 +168,6 @@ loadData().then(data => {
                 return colorScale(d['region']);
             });
 
-        // d3.selectAll('rect').on('click', function (selected) {
-        //     d3.selectAll('rect').style('opacity', 0.3);
-        //     d3.select(this).style('opacity', 1);
-        //
-        //     d3.selectAll('circle').style('opacity', 0);
-        //     d3.selectAll('circle').filter(d => d['region'] == selected.region).style('opacity', 1);
-        // });
-
         updateSelected();
 
         return;
@@ -180,8 +177,44 @@ loadData().then(data => {
         return;
     }
 
+    function updateLinear() {
+        if (selectedCountry) {
+            d3.select('.country-name').text(selectedCountry);
+
+            let countryData = data.filter(d => d['country'] == selectedCountry).map(d => d[lineParam])[0];
+
+            let linearData = [];
+            for (let i = 1800; i < 2021; i++)
+                linearData.push({"year": i, "value": parseFloat(countryData[i])})
+
+            linearData.splice(221, 5);
+
+            x.domain([1800, 2020]);
+            xLineAxis.call(d3.axisBottom(x).tickFormat(d3.format("d")));
+
+            let yRange = d3.values(countryData).map(d => +d);
+            y.domain([0, d3.max(yRange)]);
+            yLineAxis.call(d3.axisLeft(y));
+
+            lineChart.append('path').attr('class', 'line').datum(linearData)
+                .enter()
+                .append('path');
+
+            lineChart.selectAll('.line').datum(linearData)
+                .attr("fill", "none")
+                .attr("stroke", colorScale(selectedCountryRegion))
+                .attr("stroke-width", 5)
+                .attr("d", d3.line()
+                    .x(d => x(d.year))
+                    .y(d => y(d.value))
+                );
+        }
+        return;
+    }
+
     updateBar();
     updateScatterPlot();
+    updateLinear();
 });
 
 
