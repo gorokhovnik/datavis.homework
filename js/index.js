@@ -77,6 +77,63 @@ loadData().then(data => {
     });
 
     function updateBar() {
+        uniqueRegions = d3.map(data, function (d) {
+            return d['region'];
+        }).keys();
+
+        means = uniqueRegions.map(
+            regions => (
+                d3.mean(
+                    data.filter(d => d['region'] == regions)
+                        .flatMap(d => d[param][year])
+                )
+            )
+        );
+
+        meansRegions = [];
+        uniqueRegions.forEach((key, i) => {
+            let tmp = {"region": key, "mean": means[i]};
+            meansRegions.push(tmp);
+        });
+
+        xBar.domain(uniqueRegions);
+        xBarAxis.call(d3.axisBottom(xBar));
+
+        yBar.domain([0, d3.max(means)]);
+        yBarAxis.call(d3.axisLeft(yBar));
+
+        barChart.selectAll('rect').data(meansRegions)
+            .enter()
+            .append('rect')
+            .attr('width', xBar.bandwidth())
+            .attr('height', function (d) {
+                return height - yBar(d['mean']);
+            })
+            .attr('x', function (d) {
+                return xBar(d['region']);
+            })
+            .attr('y', function (d) {
+                return yBar(d['mean']) - 30;
+            })
+            .style("fill", function (d) {
+                return colorScale(d['region']);
+            });
+
+        barChart.selectAll('rect').data(meansRegions)
+            .attr('width', xBar.bandwidth())
+            .attr('height', function (d) {
+                return height - yBar(d['mean']);
+            })
+            .attr('x', function (d) {
+                return xBar(d['region']);
+            })
+            .attr('y', function (d) {
+                return yBar(d['mean']) - 30;
+            })
+            .style("fill", function (d) {
+                return colorScale(d['region']);
+            });
+
         return;
     }
 
